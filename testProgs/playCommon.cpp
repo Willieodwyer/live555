@@ -24,9 +24,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 #include "playCommon.hh"
 #include "BasicUsageEnvironment.hh"
 #include "GroupsockHelper.hh"
-#if defined(HAVE_EPOLL_SCHEDULER)
-#include "EpollTaskScheduler.hh"
-#endif
 
 #if defined(__WIN32__) || defined(_WIN32)
 #define snprintf _snprintf
@@ -151,11 +148,7 @@ void usage() {
 
 int main(int argc, char** argv) {
   // Begin by setting up our usage environment:
-#if defined(HAVE_EPOLL_SCHEDULER)
-  TaskScheduler* scheduler = EpollTaskScheduler::createNew();
-#else
   TaskScheduler* scheduler = BasicTaskScheduler::createNew();
-#endif
   env = BasicUsageEnvironment::createNew(*scheduler);
 
   progName = argv[0];

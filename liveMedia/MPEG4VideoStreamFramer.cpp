@@ -31,7 +31,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 ////////// MPEG4VideoStreamParser definition //////////
 
 // An enum representing the current state of the parser:
-namespace {
 enum MPEGParseState {
   PARSING_VISUAL_OBJECT_SEQUENCE,
   PARSING_VISUAL_OBJECT_SEQUENCE_SEEN_CODE,
@@ -41,7 +40,6 @@ enum MPEGParseState {
   PARSING_VIDEO_OBJECT_PLANE,
   PARSING_VISUAL_OBJECT_SEQUENCE_END_CODE
 };
-}
 
 class MPEG4VideoStreamParser: public MPEGVideoStreamParser {
 public:
