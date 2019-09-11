@@ -14,7 +14,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 **********/
 // "liveMedia"
-// Copyright (c) 1996-2019 Live Networks, Inc.  All rights reserved.
+// Copyright (c) 1996-2018 Live Networks, Inc.  All rights reserved.
 // A generic RTSP client
 // Implementation
 
@@ -142,11 +142,12 @@ unsigned RTSPClient::sendGetParameterCommand(MediaSession& session, responseHand
   if (fCurrentAuthenticator < authenticator) fCurrentAuthenticator = *authenticator;
 
   // We assume that:
-  //    parameterName is NULL or "" means: Send no body in the request.
+  //    parameterName is NULL means: Send no body in the request.
+  //    parameterName is "" means: Send only \r\n in the request body.  
   //    parameterName is non-empty means: Send "<parameterName>\r\n" as the request body.  
   unsigned parameterNameLen = parameterName == NULL ? 0 : strlen(parameterName);
   char* paramString = new char[parameterNameLen + 3]; // the 3 is for \r\n + the '\0' byte
-  if (parameterName == NULL || parameterName[0] == '\0') {
+  if (parameterName == NULL) {
     paramString[0] = '\0';
   } else {
     sprintf(paramString, "%s\r\n", parameterName);

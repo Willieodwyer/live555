@@ -14,7 +14,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 **********/
 // "liveMedia"
-// Copyright (c) 1996-2019 Live Networks, Inc.  All rights reserved.
+// Copyright (c) 1996-2018 Live Networks, Inc.  All rights reserved.
 // Media Sinks
 // C++ header
 
@@ -68,6 +68,7 @@ private:
 };
 
 // A data structure that a sink may use for an output packet:
+void setOutputPacketMaxSize(unsigned size);
 class OutPacketBuffer {
 public:
   OutPacketBuffer(unsigned preferredPacketSize, unsigned maxPacketSize,

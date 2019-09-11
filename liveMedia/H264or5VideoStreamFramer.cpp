@@ -14,7 +14,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 **********/
 // "liveMedia"
-// Copyright (c) 1996-2019 Live Networks, Inc.  All rights reserved.
+// Copyright (c) 1996-2018 Live Networks, Inc.  All rights reserved.
 // A filter that breaks up a H.264 or H.265 Video Elementary Stream into NAL units.
 // Implementation
 
@@ -894,11 +894,11 @@ void H264or5VideoStreamParser
       unsigned dpb_output_delay = bv.getBits(dpb_output_delay_length_minus1 + 1);
       DEBUG_PRINT(dpb_output_delay);
     }
-    double prevDeltaTfiDivisor = DeltaTfiDivisor; 
     if (pic_struct_present_flag) {
       unsigned pic_struct = bv.getBits(4);
       DEBUG_PRINT(pic_struct);
       // Use this to set "DeltaTfiDivisor" (which is used to compute the frame rate):
+      double prevDeltaTfiDivisor = DeltaTfiDivisor; 
       if (fHNumber == 264) {
 	DeltaTfiDivisor =
 	  pic_struct == 0 ? 2.0 :
@@ -919,21 +919,15 @@ void H264or5VideoStreamParser
 	  pic_struct <= 12 ? 1.0 :
 	  2.0;
       }
-    } else {
-      if (fHNumber == 264) {
-	// Need to get field_pic_flag from slice_header to set this properly! #####
-      } else { // H.265
-	DeltaTfiDivisor = 1.0;
-      }
-    }
-    // If "DeltaTfiDivisor" has changed, and we've already computed the frame rate, then
-    // adjust it, based on the new value of "DeltaTfiDivisor":
-    if (DeltaTfiDivisor != prevDeltaTfiDivisor && fParsedFrameRate != 0.0) {
-      usingSource()->fFrameRate = fParsedFrameRate
-	= fParsedFrameRate*(prevDeltaTfiDivisor/DeltaTfiDivisor);
+      // If "DeltaTfiDivisor" has changed, and we've already computed the frame rate, then
+      // adjust it, based on the new value of "DeltaTfiDivisor":
+      if (DeltaTfiDivisor != prevDeltaTfiDivisor && fParsedFrameRate != 0.0) {
+	  usingSource()->fFrameRate = fParsedFrameRate
+	    = fParsedFrameRate*(prevDeltaTfiDivisor/DeltaTfiDivisor);
 #ifdef DEBUG
-      fprintf(stderr, "Changed frame rate to %f fps\n", usingSource()->fFrameRate);
+	  fprintf(stderr, "Changed frame rate to %f fps\n", usingSource()->fFrameRate);
 #endif
+      }
     }
     // Ignore the rest of the payload (timestamps) for now... #####
   }
@@ -945,6 +939,8 @@ void H264or5VideoStreamParser::flushInput() {
 
   StreamParser::flushInput();
 }
+
+#define NUM_NEXT_SLICE_HEADER_BYTES_TO_ANALYZE 12
 
 unsigned H264or5VideoStreamParser::parse() {
   try {

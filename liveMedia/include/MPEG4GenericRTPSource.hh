@@ -14,7 +14,7 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 **********/
 // "liveMedia"
-// Copyright (c) 1996-2019 Live Networks, Inc.  All rights reserved.
+// Copyright (c) 1996-2018 Live Networks, Inc.  All rights reserved.
 // MPEG4-GENERIC ("audio", "video", or "application") RTP stream sources
 // C++ header
 
@@ -40,6 +40,9 @@ public:
   // it *cannot* be NULL
 
 protected:
+  virtual ~MPEG4GenericRTPSource();
+
+private:
   MPEG4GenericRTPSource(UsageEnvironment& env, Groupsock* RTPgs,
 			unsigned char rtpPayloadFormat,
 			unsigned rtpTimestampFrequency,
@@ -48,10 +51,9 @@ protected:
 			unsigned sizeLength, unsigned indexLength,
 			unsigned indexDeltaLength
 			);
-      // called only by createNew(), or by subclass constructors
-  virtual ~MPEG4GenericRTPSource();
+      // called only by createNew()
 
-protected:
+private:
   // redefined virtual functions:
   virtual Boolean processSpecialHeader(BufferedPacket* packet,
                                        unsigned& resultSpecialHeaderSize);
